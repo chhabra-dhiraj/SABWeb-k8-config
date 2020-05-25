@@ -1,0 +1,29 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nginx-sa-demo
+spec:
+  selector:
+    matchLabels:
+      app: nginx-sa-demo
+  template:
+    metadata:
+      labels:
+        app: nginx-sa-demo
+    spec:
+      containers:
+        - name: nginx
+          image: nginx
+          ports:
+            - containerPort: 80
+          volumeMounts:
+            - mountPath: /etc/nginx/nginx.conf
+              subPath: nginx.conf
+              name: nginx-conf-sa-demo
+      volumes:
+        - name: nginx-conf-sa-demo
+          configMap:
+            name: nginx-conf-sa-demo
+            items:
+              - key: nginx.conf
+                path: nginx.conf

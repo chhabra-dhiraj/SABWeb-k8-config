@@ -1,0 +1,36 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: sa-demo
+spec:
+  selector:
+    matchLabels:
+      app: sa-demo
+  template:
+    metadata:
+      labels:
+        name: sa-demo
+        app: sa-demo
+    spec:
+      containers:
+        - name: sa-demo
+          image: 205613023608.dkr.ecr.us-east-2.amazonaws.com/sa-demo:latest
+          imagePullPolicy: Always
+          resources:
+            requests:
+              memory: "200Mi"
+              cpu: "200m"
+            limits:
+              memory: "2000Mi"
+              cpu: "1"
+          command: ["/bin/bash", "-c", "--"]
+          args: ["/start"]
+          ports:
+            - containerPort: 9000
+              name: django
+              protocol: TCP
+          envFrom:
+            - configMapRef:
+                name: sa-demo
+            - secretRef:
+                name: sa-demo
